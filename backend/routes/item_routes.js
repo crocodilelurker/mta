@@ -1,0 +1,9 @@
+//item router
+import { Router } from "express";
+const router = Router();
+router.get("/health", (req, res) => {
+    res.status(200).json({
+        "health": "good"
+    })
+})
+export default router;

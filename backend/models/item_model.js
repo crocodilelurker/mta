@@ -6,9 +6,10 @@ const itemSchema = new mongoose.Schema({
     desc: { type: String, required: true },
     image: { type: String, required: true },
     stock: { type: Number, required: true },
-    whishlistedBy:{type:Number, default:0},
-    cartedBy:{type:Number, default:0},
-    vendor: { type: mongoose.Schema.Types.ObjectId, ref: "vendor" },
+    vendor: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
+    shop: { type: mongoose.Schema.Types.ObjectId, ref: "shop", required: true },
+    whishlistedBy: { type: Number, default: 0 },
+    cartedBy: { type: Number, default: 0 },
     shop: { type: mongoose.Schema.Types.ObjectId, ref: "shop" },
     secondaryDescription: {
         type: String,
