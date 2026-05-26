@@ -86,9 +86,38 @@ const loginAsUser = async (req, res) => {
 };
 const loginAsVendor = async (req, res) => {
     try {
-
+        const {email,pass} = req.body;
+        if (!email || !pass){
+            return response(res, 400, "all fields are required", null);
+        }
+        const vendor = await userModel.findOne({email:email , role: "vendor"})
+        if (!vendor){
+            return response(res, 404, "invaid password or username", null);
+        }
+        const isPasswordValid =await bcrypt.compare(pass,vendor.password);
+        if (!isPasswordValid){
+            return response(res, 401, "invalid password or username", null);
+        }
+        const payload = {
+            id: vendor._id,
+            role: vendor.role,
+            email: vendor.email,
+        };
+        const token = jwt.sign(
+            payload,
+            process.env.JWT_SECRET_KEY,
+            {
+                expiresIn: '1h',
+            }
+        );
+        return response(res, 200, "vendor logged in successfully", {
+            success: true,
+            vendor,
+            token
+        });
     } catch (error) {
-
+        console.error(error);
+        return response(res, 500, "internal server error", null);
     }
 };
 
