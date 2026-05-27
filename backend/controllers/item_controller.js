@@ -47,7 +47,24 @@ const deleteItem = async (req, res) => {
         if (!id) {
             return response(res, 400, "we need id as params :id", null);
         }
-
+        const itemExists = await itemModel.findById(id);
+        let vendor = req.user.id;
+        //if (!itemExists || !itemExists.vendor.equals(vendor)) 
+        if (!itemExists || (!itemExists.vendor.equals(vendor) && req.user.role !== 'admin'))
+        {
+            return response(res, 403, "Unauthorized you cant delete an item which is not published by you", null);
+        }
+        //delete item 
+        //delete item from the shop as well 
+        const shopId = itemExists.shop;
+        const shopExists = await shopModel.findById(shopId);
+        if (!shopExists) {
+            return response(res, 400, "Shop Not found for item deletion", null);
+        }
+        shopExists.items.pull(itemExists._id);
+        await shopExists.save();
+        await itemExists.deleteOne();
+        return response(res, 200, "item deleted successfully", null);
     }
     catch (error) {
         console.error(error);
