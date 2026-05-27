@@ -9,12 +9,24 @@ const protect = async (req, res, next) => {
             req.user = decoded;
             next();
         }
+        else {
+            return response(res, 401, "unauthenticated");
+        }
     } catch (error) {
         console.error(error);
         return response(res, 500, "internal server error at middleware", null)
     }
 }
 
+const authorize = (...roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return response(res, 403, "Unauthorized Access")
+        }
+        next();
+    }
+}
 export {
-    protect
+    protect,
+    authorize
 }

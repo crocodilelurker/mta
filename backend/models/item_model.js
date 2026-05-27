@@ -10,10 +10,10 @@ const itemSchema = new mongoose.Schema({
     shop: { type: mongoose.Schema.Types.ObjectId, ref: "shop", required: true },
     whishlistedBy: { type: Number, default: 0 },
     cartedBy: { type: Number, default: 0 },
-    shop: { type: mongoose.Schema.Types.ObjectId, ref: "shop" },
     secondaryDescription: {
         type: String,
-        enum: ["best seller", "exclusive", "base", "limited edition"]
+        enum: ["best seller", "exclusive", "base", "limited edition"],
+        default: "base"
     },
     rating: {
         type: Number,
