@@ -10,10 +10,12 @@ const protect = async (req, res, next) => {
             next();
         }
         else {
-            return response(res, 401, "unauthenticated");
+            return response(res, 401, "unauthenticated", null);
         }
     } catch (error) {
         console.error(error);
+        if (error.name == "TokenExpiredError" || error.name == "JsonWebTokenError")
+            return response(res, 401, "unauthenticated", error);
         return response(res, 500, "internal server error at middleware", null)
     }
 }

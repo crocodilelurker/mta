@@ -11,6 +11,35 @@ import itemModel from "../models/item_model.js";
 import shopModel from "../models/shop_model.js";
 import response from "../utils/responseHandler.js";
 
+const updateItem = async (req, res) => {
+    try {
+        const { name, price, image, desc, stock, secondaryDescription } = req.body;
+        const { id } = req.params;
+        // get the item
+        if (name == undefined || price == undefined || !image || !desc || stock == undefined || !id || !secondaryDescription) {
+            return response(res, 400, "all fields are required", null);
+        }
+        const itemExists = await itemModel.findById(id);
+        let vendor = req.user.id;
+        if (!itemExists || !itemExists.vendor.equals(vendor)) {
+            return response(res, 400, "unauthorized to update or item doesnt Exists", null);
+        }
+        itemExists.name = name;
+        itemExists.price = price;
+        itemExists.image = image;
+        itemExists.desc = desc;
+        itemExists.stock = stock;
+        itemExists.secondaryDescription = secondaryDescription;
+        await itemExists.save();
+        return response(res, 200, "item updated successfully", itemExists);
+    }
+    catch (error) {
+        console.error(error);
+        return response(res, 500, "internal server error at updateitemcont", null)
+    }
+}
+
+
 const createItem = async (req, res) => {
     try {
         const { name, price, image, desc, stock, shop } = req.body;
@@ -50,8 +79,7 @@ const deleteItem = async (req, res) => {
         const itemExists = await itemModel.findById(id);
         let vendor = req.user.id;
         //if (!itemExists || !itemExists.vendor.equals(vendor)) 
-        if (!itemExists || (!itemExists.vendor.equals(vendor) && req.user.role !== 'admin'))
-        {
+        if (!itemExists || (!itemExists.vendor.equals(vendor) && req.user.role !== 'admin')) {
             return response(res, 403, "Unauthorized you cant delete an item which is not published by you", null);
         }
         //delete item 
@@ -73,5 +101,6 @@ const deleteItem = async (req, res) => {
 }
 export {
     createItem,
-    deleteItem
+    deleteItem,
+    updateItem
 };
