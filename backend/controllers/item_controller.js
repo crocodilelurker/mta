@@ -2,6 +2,7 @@
 // create item 
 // delete item
 // update item
+
 // get item by id
 // get all items
 // get all items for the shop
@@ -10,6 +11,50 @@
 import itemModel from "../models/item_model.js";
 import shopModel from "../models/shop_model.js";
 import response from "../utils/responseHandler.js";
+
+
+const getItem = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!id) {
+            return response(res, 400, "id field is required", null);
+        }
+        const itemExists = await itemModel.findById(id);
+        if (!itemExists) {
+            return response(res, 404, "Item Not found with matching ID ", null);
+        }
+        return response(res, 200, "item found", itemExists);
+    }
+    catch (error) {
+        console.error(error);
+        return response(res, 500, "Ise at get item", null);
+    }
+}
+const getAllItems = async (req, res) => {
+    try {
+        const items = await itemModel.find();
+        return response(res, 200, "All items", items);
+    } catch (error) {
+        console.error(error);
+        return response(res, 500, "ise at get ALL items", null);
+    }
+}
+const getAllItemsByShop = async (req, res) => {
+    try {
+        const { shopId } = req.params;
+        const shopExists = await shopModel.findById(shopId);
+        if (!shopExists) {
+            return response(res, 404, "Shop doesnt Exist", null);
+        }
+        const items = shopExists.items;
+        //items is array of items id in the shop
+        const itemsFound = await itemModel.find({ _id: { $in: items } });
+        return response(res, 200, "items found", itemsFound);
+    } catch (error) {
+        console.error(error);
+        return response(res, 500, "internal server error at getAllItemsByShop", null);
+    }
+}
 
 const updateItem = async (req, res) => {
     try {
@@ -102,5 +147,8 @@ const deleteItem = async (req, res) => {
 export {
     createItem,
     deleteItem,
-    updateItem
+    updateItem,
+    getItem,
+    getAllItems,
+    getAllItemsByShop
 };
