@@ -5,6 +5,8 @@ import connectDB from "./config/dbConfig.js";
 import authRoutes from "./routes/auth_routes.js";
 import shopRoutes from "./routes/shop_routes.js";
 import itemRoutes from "./routes/item_routes.js";
+import orderRoutes from "./routes/order_routes.js";
+
 dotenv.config();
 
 const PORT = process.env.PORT || 8080;
@@ -16,6 +18,8 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/shop", shopRoutes);
 app.use("/api/item", itemRoutes);
+app.use("/api/order", orderRoutes);
+
 connectDB();
 
 app.get("/", (req, res) => {
