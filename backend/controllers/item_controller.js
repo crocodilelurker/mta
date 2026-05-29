@@ -55,7 +55,6 @@ const getAllItemsByShop = async (req, res) => {
         return response(res, 500, "internal server error at getAllItemsByShop", null);
     }
 }
-
 const updateItem = async (req, res) => {
     try {
         const { name, price, image, desc, stock, secondaryDescription } = req.body;
@@ -83,8 +82,6 @@ const updateItem = async (req, res) => {
         return response(res, 500, "internal server error at updateitemcont", null)
     }
 }
-
-
 const createItem = async (req, res) => {
     try {
         const { name, price, image, desc, stock, shop } = req.body;
@@ -114,7 +111,6 @@ const createItem = async (req, res) => {
         return response(res, 500, "internal server error at item controller ", null);
     }
 }
-
 const deleteItem = async (req, res) => {
     try {
         const { id } = req.params;

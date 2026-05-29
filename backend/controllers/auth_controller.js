@@ -48,7 +48,6 @@ const register = async (req, res) => {
         return response(res, 500, "internal server error", null);
     }
 }
-
 const loginAsUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -86,16 +85,16 @@ const loginAsUser = async (req, res) => {
 };
 const loginAsVendor = async (req, res) => {
     try {
-        const {email,pass} = req.body;
-        if (!email || !pass){
+        const { email, pass } = req.body;
+        if (!email || !pass) {
             return response(res, 400, "all fields are required", null);
         }
-        const vendor = await userModel.findOne({email:email , role: "vendor"})
-        if (!vendor){
+        const vendor = await userModel.findOne({ email: email, role: "vendor" })
+        if (!vendor) {
             return response(res, 404, "invaid password or username", null);
         }
-        const isPasswordValid =await bcrypt.compare(pass,vendor.password);
-        if (!isPasswordValid){
+        const isPasswordValid = await bcrypt.compare(pass, vendor.password);
+        if (!isPasswordValid) {
             return response(res, 401, "invalid password or username", null);
         }
         const payload = {

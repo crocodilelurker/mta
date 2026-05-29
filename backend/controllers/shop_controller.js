@@ -34,7 +34,6 @@ const getShop = async (req, res) => {
         return response(res, 500, "internal server error", null)
     }
 }
-
 const updateShop = async (req, res) => {
     try {
         const { id } = req.params;
