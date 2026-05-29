@@ -121,8 +121,25 @@ const loginAsVendor = async (req, res) => {
 };
 
 
+const getMe = async (req, res) => {
+    try {
+        const user = await userModel.findById(req.user.id).select("-password");
+        if (!user) {
+            return response(res, 404, "user not found", null);
+        }
+        return response(res, 200, "user fetched successfully", {
+            isSignedIn: true,
+            user
+        });
+    } catch (error) {
+        console.error(error);
+        return response(res, 500, "internal server error", null);
+    }
+};
+
 export {
     register,
     loginAsUser,
-    loginAsVendor
+    loginAsVendor,
+    getMe
 };
