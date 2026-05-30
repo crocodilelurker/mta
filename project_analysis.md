@@ -23,14 +23,15 @@ The backend is built using Node.js, Express, and MongoDB with Mongoose, and feat
    - **Role-Based Authorization**: A role guard middleware restricts sensitive operations (such as store creation and product listing modifications) to authorized vendor accounts, while keeping item retrieval public.
 
 3. **Controllers and Routes**:
-   - **Auth**: Fully handles registration, login endpoints, and logout.
+   - **Auth**: Fully handles registration, login endpoints, and logout with complete silent exception guards.
    - **Shop**: Handles store creation with dynamic slug generation and verification.
    - **Item**: Handles complete CRUD operations (create, read, update, delete) with strict vendor ownership checks.
    - **Order**: Handles consolidated checkout flows with automatic stock verification, real-time inventory deduction, and single-item status transitions. Added order status verification to ensure customer data privacy.
+   - **User & Cart**: Supports secure profile retrieval and update endpoints (fully protected against password leaks), and a fully registered persistent Cart API (`addToCart`, `deleteFromCart`, `getCart`) utilizing type-casting ObjectId comparisons and automatic item population.
 
 ### Areas for Improvement and New Features
 1. **Real-time Order Updates**: Integrate WebSockets (using Socket.io) to send instant order alerts to vendors when a purchase is made and notify customers when a vendor fulfills their item.
-2. **Persistent Cart and Wishlist API**: Add backend endpoints to store the active cart and wishlist in the database rather than relying purely on client-side storage, ensuring cross-device consistency.
+2. **Persistent Wishlist API**: Add backend endpoints to store the active wishlist (`addToWishlist`, `deleteFromWishlist`) in the database, complementing the newly completed persistent Cart API.
 3. **Payment Gateway Integration**: Replace the mock checkout logic with a fully functional production payment system (such as Stripe or PayPal) with secure webhook verification.
 4. **Automated Order Commission Split**: Implement automated calculations to distribute payout shares to different vendors from a single checkout transaction, subtracting the marketplace platform fee.
 5. **Robust Reviews System**: Create endpoints for consumers to submit ratings and textual reviews, complete with calculations that dynamically update the product rating statistics in the database.

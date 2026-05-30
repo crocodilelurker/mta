@@ -80,7 +80,8 @@ const loginAsUser = async (req, res) => {
             token
         });
     } catch (error) {
-
+        console.error(error);
+        return response(res, 500, "internal server error", null);
     }
 };
 const loginAsVendor = async (req, res) => {

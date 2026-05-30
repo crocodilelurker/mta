@@ -6,6 +6,8 @@ import authRoutes from "./routes/auth_routes.js";
 import shopRoutes from "./routes/shop_routes.js";
 import itemRoutes from "./routes/item_routes.js";
 import orderRoutes from "./routes/order_routes.js";
+import userRoutes from "./routes/user_routes.js";
+
 import cors from "cors";
 dotenv.config();
 
@@ -27,6 +29,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/shop", shopRoutes);
 app.use("/api/item", itemRoutes);
 app.use("/api/order", orderRoutes);
+app.use("/api/user", userRoutes);
 
 connectDB();
 

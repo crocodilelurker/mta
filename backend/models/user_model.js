@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: {
         type: String,
@@ -15,8 +15,8 @@ const userSchema = new mongoose.Schema({
     desc: { type: String },
     image: { type: String, },
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "order" }],
-    cart: [{ type: mongoose.Schema.Types.ObjectId, ref: "cart" }],
-    whishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "whishlist" }],
+    cart: [{ type: mongoose.Schema.Types.ObjectId, ref: "item" }],
+    whishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "item" }],
     shops: [{ type: mongoose.Schema.Types.ObjectId, ref: "shop" }],
 }, { timestamps: true });
 
