@@ -26,5 +26,6 @@ const defaultLimiter = rateLimit({
 })
 
 export {
-    defaultLimiter
+    defaultLimiter,
+    upstashRedis
 }
