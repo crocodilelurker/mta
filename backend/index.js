@@ -7,6 +7,7 @@ import shopRoutes from "./routes/shop_routes.js";
 import itemRoutes from "./routes/item_routes.js";
 import orderRoutes from "./routes/order_routes.js";
 import userRoutes from "./routes/user_routes.js";
+import { defaultLimiter } from "./middlewares/rate_limiter.js";
 
 import cors from "cors";
 dotenv.config();
@@ -17,6 +18,7 @@ const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -25,6 +27,7 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"],
 }))
 
+app.use(defaultLimiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/shop", shopRoutes);
 app.use("/api/item", itemRoutes);
