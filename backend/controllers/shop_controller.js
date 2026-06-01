@@ -8,7 +8,7 @@ import itemModel from "../models/item_model.js";
 import userModel from "../models/user_model.js";
 import response from "../utils/responseHandler.js"
 import slugNameGen from "../utils/slugNameGenerator.js";
-
+import { upstashRedis } from "../middlewares/rate_limiter.js";
 const getAllShop = async (req, res) => {
     try {
         const shops = await shopModel.find();
@@ -112,10 +112,26 @@ const createShop = async (req, res) => {
         return response(res, 500, "internal server error at spc", null);
     }
 }
+const getHotShop = async (req, res) => {
+    try {
+        const cachedShops = await upstashRedis.get("shops:hot");
+        if (cachedShops) {
+            return response(res, 200, "hot shops found successfully", cachedShops);
+        }
+        else {
+            
+            return response(res, 404, "hot shops not found", null);
+        }
+    } catch (error) {
+        console.error(error);
+        return response(res, 500, "internal server error", null);
+    }
+}
 export {
     createShop,
     deleteShop,
     updateShop,
     getShop,
-    getAllShop
+    getAllShop,
+    getHotShop
 }

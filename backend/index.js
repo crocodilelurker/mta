@@ -8,7 +8,7 @@ import itemRoutes from "./routes/item_routes.js";
 import orderRoutes from "./routes/order_routes.js";
 import userRoutes from "./routes/user_routes.js";
 import { defaultLimiter } from "./middlewares/rate_limiter.js";
-
+import { updateHotShopsCache } from "./workers/shop_ranker.js";
 import cors from "cors";
 dotenv.config();
 
@@ -34,7 +34,9 @@ app.use("/api/item", itemRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/user", userRoutes);
 
-connectDB();
+connectDB().then(() => {
+    updateHotShopsCache();
+});
 
 app.get("/", (req, res) => {
     return res.send("health good on home");
